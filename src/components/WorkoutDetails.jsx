@@ -1,13 +1,19 @@
-import { useState } from "react"
+// import { useState } from "react"
 import { FaTrashAlt } from "react-icons/fa"
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow"
+import useAuthContext from "../hooks/useAuthContext"
 
 const WorkoutDetails = ({ workout }) => {
-  // eslint-disable-next-line
-  const [workouts, setWorkouts] = useState(null)
+  // const [workouts, setWorkouts] = useState(null)
+  const { user } = useAuthContext()
   const handleClick = async () => {
+    if (!user) {
+      return
+    }
+
     const res = await fetch(`/api/workouts/${workout._id}`, {
       method: "DELETE",
+      headers: { Authorization: `Bearer ${user.token}` },
     })
     const json = await res.json()
 
